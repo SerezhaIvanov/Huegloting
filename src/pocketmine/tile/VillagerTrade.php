@@ -140,8 +140,8 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	 */
 	
 		public function trade($trade){
-		$i = $this->getSlotIndex($index);
-		if($item->getId() === Item::AIR or $item->getCount() <= 0){
+		$i = $this->getTradeByItem($trade);
+		if($i->asIdByInt() === Item::AIR or $item->getCount() <= 0){ boolean
 			if($i >= 0){
 				unset($this->namedtag->Items[$i]);
 			}
