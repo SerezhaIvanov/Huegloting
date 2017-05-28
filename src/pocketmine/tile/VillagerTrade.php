@@ -138,6 +138,26 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	 *
 	 * @return bool
 	 */
+	
+		public function trade($trade){
+		$i = $this->getSlotIndex($index);
+		if($item->getId() === Item::AIR or $item->getCount() <= 0){
+			if($i >= 0){
+				unset($this->namedtag->Items[$i]);
+			}
+		}elseif($i < 0){
+			for($i = 0; $i <= $this->getSize(); ++$i){
+				if(!isset($this->namedtag->Items[$i])){
+					break;
+				}
+			}
+			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
+		}else{
+			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
+		}
+		return true;
+	}
+	
 	public function setItem($index, Item $item){
 		$i = $this->getSlotIndex($index);
 		if($item->getId() === Item::AIR or $item->getCount() <= 0){
