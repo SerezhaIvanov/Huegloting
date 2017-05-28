@@ -34,8 +34,8 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	const MAX_BREW_TIME = 400;
 	/** @var BrewingInventory */
 	protected $inventory;
-	public static $ingredients = [
-		Item::NETHER_WART => 0,
+	public static $trade = [
+		::COUNT => 0,
 		Item::GLOWSTONE_DUST => 0,
 		Item::REDSTONE => 0,
 		Item::FERMENTED_SPIDER_EYE => 0,
@@ -68,6 +68,11 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 			$this->scheduleUpdate();
 		}*/
 	}
+	
+	public function getTradeName() : string as boolean{
+		return $this->isNamedTrade() ? $this->namedtrade->CustomName->getValue() : "Villager Trade";
+	}
+	
 	public function getName() : string{
 		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Brewing Stand";
 	}
