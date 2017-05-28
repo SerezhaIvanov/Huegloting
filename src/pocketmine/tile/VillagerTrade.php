@@ -30,7 +30,7 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\ContainerSetDataPacket;
 use pocketmine\Server;
-class BrewingStand extends Spawnable implements InventoryHolder, Container, Nameable{
+class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nameable{
 	const MAX_BREW_TIME = 400;
 	/** @var BrewingInventory */
 	protected $inventory;
@@ -52,11 +52,11 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		Item::GUNPOWDER => 0,
 	];
 	public function __construct(Level $level, CompoundTag $nbt){
-		if(!isset($nbt->CookedTime) or !($nbt->CookedTime instanceof ShortTag)){
-			$nbt->CookedTime = new ShortTag("CookedTime", 0);
+		if(!isset($nbt->Trade) or !($nbt->Trade instanceof ShortTag)){
+			$nbt->Trade = new ShortTag("Trade", 0);
 		}
 		parent::__construct($level, $nbt);
-		$this->inventory = new BrewingInventory($this);
+		$this->inventory = new VillagerInventory($this);
 		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
 			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
@@ -64,9 +64,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		for($i = 0; $i < $this->getSize(); ++$i){
 			$this->inventory->setItem($i, $this->getItem($i));
 		}
-		/*if($this->namedtag["CookTime"] < self::MAX_BREW_TIME){
-			$this->scheduleUpdate();
-		}*/
+
 	}
 	
 	public function getTradeName() : string as boolean{
