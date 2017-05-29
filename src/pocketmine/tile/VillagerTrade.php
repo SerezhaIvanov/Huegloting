@@ -18,7 +18,7 @@
  *
  */
 namespace pocketmine\tile;
-use pocketmine\inventory\BrewingInventory;
+use pocketmine\inventory\Villager as VillagerInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
@@ -30,7 +30,7 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\ContainerSetDataPacket;
 use pocketmine\Server;
-class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nameable{
+class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nameable, VillagerInventory{
 	const MAX_BREW_TIME = 400;
 	/** @var BrewingInventory */
 	protected $inventory;
@@ -56,7 +56,7 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 			$nbt->Trade = new ShortTag("Trade", 0);
 		}
 		parent::__construct($level, $nbt);
-		$this->inventory = new VillagerInventory($this);
+		$this->inventory = new VillagerInventory2($this);
 		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
 			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
@@ -103,7 +103,7 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 	 * @return int
 	 */
 	public function getSize(){
-		return 4;
+		return 3;
 	}
 	/**
 	 * @param $index
@@ -141,6 +141,8 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 	 *
 	 * @return bool
 	 */
+	
+	
 	
 		public function trade($trade){
 		$i = $this->getTradeByItem($trade);
@@ -185,9 +187,9 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 	public function getInventory(){
 		return $this->inventory;
 	}
-	public function checkIngredient(Item $item){
-		if(isset(self::$ingredients[$item->getId()])){
-			if(self::$ingredients[$item->getId()] === $item->getDamage()){
+	public function checkTrade(Item $item, $trade){
+		if(isset(self::$trade[$item->getId()])){
+			if(self::$trade[$item->getId()] === $item->getDamage()){
 				return true;
 			}
 		}
