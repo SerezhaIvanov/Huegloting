@@ -65,6 +65,20 @@ class NEWHorseAI extends Animal, Living{
 		return $drops;
 	}
 	
+	public function setArmor(Item $item){
+		$NORMspeed = 1;
+		$DMGspeed = 1.7;
+		$contents = $this->getContents;
+
+		if($contets instanceof Air){
+			$this->setArmor($item); //5 seconds
+		}
+		if(!$contents instanceof Air){
+					$this->cancel();
+		}
+
+		return $this->armor;
+	}
 	
 	public function move(Horse $horse){
 		$NORMspeed = 1;
