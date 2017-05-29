@@ -64,4 +64,22 @@ class NEWHorseAI extends Animal, Living{
 		}*/
 		return $drops;
 	}
+	
+	public function move(Horse $horse){
+		$NORMspeed = 1;
+		$DMGspeed = 1.7;
+		$cause = $this->lastDamageCause;
+		$move = $this->horseMovement;
+		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
+			$this->setMove(5, $DMGspeed);
+		}
+		if($move instanceof Nornal and $horse->y -1 != 0){
+			$this->setMove($this->horseMovement->normal, $DMGspeed);
+		}
+		/*if ($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player) {
+			$drops[] = ItemItem::get(ItemItem::LEATHER, 0, mt_rand(0,2));
+		}*/
+		return $this->horseMovement;
+	}
+	
 }
