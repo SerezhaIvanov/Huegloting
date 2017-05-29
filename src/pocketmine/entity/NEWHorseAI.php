@@ -66,8 +66,7 @@ class NEWHorseAI extends Animal, Living{
 	}
 	
 	public function setArmor(Item $item){
-		$NORMspeed = 1;
-		$DMGspeed = 1.7;
+		$armorDMG = self::Amor; //to do
 		$contents = $this->getContents;
 
 		if($contets instanceof Air){
