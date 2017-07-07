@@ -36,21 +36,10 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 	protected $inventory;
 	public static $trade = [
 		::COUNT => 0,
-		Item::GLOWSTONE_DUST => 0,
-		Item::REDSTONE => 0,
-		Item::FERMENTED_SPIDER_EYE => 0,
-		Item::MAGMA_CREAM => 0,
-		Item::SUGAR => 0,
-		Item::GLISTERING_MELON => 0,
-		Item::SPIDER_EYE => 0,
-		Item::GHAST_TEAR => 0,
-		Item::BLAZE_POWDER => 0,
-		Item::GOLDEN_CARROT => 0,
-		//Item::RAW_FISH => Fish::FISH_PUFFERFISH,
-		Item::PUFFER_FISH,
-		Item::RABBIT_FOOT => 0,
-		Item::GUNPOWDER => 0,
 	];
+	
+	const VALUE = 388;
+		
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->Trade) or !($nbt->Trade instanceof ShortTag)){
 			$nbt->Trade = new ShortTag("Trade", 0);
@@ -67,7 +56,7 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 
 	}
 	
-	public function getTradeName() : string as boolean{
+	public function getTradeName() : string{
 		return $this->isNamedTrade() ? $this->namedtrade->CustomName->getValue() : "Villager Trade";
 	}
 	
@@ -96,7 +85,7 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 		$this->namedtag->Items = new ListTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
-			$this->setItem($index, $this->inventory->getItem($index));
+			$this->setItem($this->getSize(), self::VALUE);
 		}
 	}
 	/**
@@ -232,27 +221,27 @@ class VillagerTrade extends Spawnable implements InventoryHolder, Container, Nam
 				}
 			}
 		}else{
-			$canBrew = false;
+			$canTrade = false;
 		}
-		if($canBrew){
-			$this->namedtag->CookTime = new ShortTag("CookTime", $this->namedtag["CookTime"] - 1);
+		if($canTrade){
+			$this->namedtag->CookTime = new ShortTag("TradeTime", $this->namedtag["TradeTime"] - 1);
 			foreach($this->getInventory()->getViewers() as $player){
 				$windowId = $player->getWindowId($this->getInventory());
 				if($windowId > 0){
 					$pk = new ContainerSetDataPacket();
 					$pk->windowid = $windowId;
-					$pk->property = 0; //Brew
-					$pk->value = $this->namedtag["CookTime"];
+					$pk->property = 0; //Trade
+					$pk->value = $this->namedtag["TradeTime"];
 					$player->dataPacket($pk);
 				}
 			}
 			if($this->namedtag["Trade"] <= 0){
 				$this->namedtag->Trade = new ShortTag("Trade", self::COUNT);
 				for($i = 1; $i <= 3; $i++){
-					$potion = $this->inventory->getItem($i);
-					$recipe = Server::getInstance()->getCraftingManager()->matchBrewingRecipe($ingredient, $potion);
-					if($recipe != null and $potion->getId() !== Item::AIR){
-						$this->inventory->setItem($i, $recipe->getResult());
+					$titem = $this->inventory->getItem($i);
+					$trade = Server::getInstance()->getCraftingManager()->matchBrewingRecipe($ingredient, $potion);
+					if($trade != null and $titem->getId() !== Item::AIR){
+						$this->inventory->setItem($i, $trade->getResult());
 					}
 				}
 				$ingredient->count--;
