@@ -36,7 +36,7 @@ class NEWHorseAI extends Animal, Living{
 	
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->eid = $this->getId();
+		$pk->runtimeId = $this->getId();
 		$pk->type = Horse::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
@@ -66,11 +66,11 @@ class NEWHorseAI extends Animal, Living{
 	}
 	
 	public function setArmor(Item $item){
-		$armorDMG = self::Amor; //to do
+		$armorDMG = self::Armor; //to do
 		$contents = $this->getContents;
 
 		if($contets instanceof Air){
-			$this->setArmor($item); //5 seconds
+			$this->chestplate($item);
 		}
 		if(!$contents instanceof Air){
 					$this->cancel();
@@ -83,17 +83,17 @@ class NEWHorseAI extends Animal, Living{
 		$NORMspeed = 1;
 		$DMGspeed = 1.7;
 		$cause = $this->lastDamageCause;
-		$move = $this->horseMovement;
+		$move = $this->normalMovement;
 		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
 			$this->setMove(5, $DMGspeed); //5 seconds
 		}
-		if($move instanceof Nornal and $horse->y -1 != 0){
+		if($move instanceof Normal and $horse->y -1 != 0){
 			$this->setMove($this->horseMovement->normal, $DMGspeed);
 		}
 		/*if ($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player) {
 			$drops[] = ItemItem::get(ItemItem::LEATHER, 0, mt_rand(0,2));
 		}*/
-		return $this->horseMovement;
+		return $this->moveMovement;
 	}
 	
 }
